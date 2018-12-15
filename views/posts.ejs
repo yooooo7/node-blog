@@ -1,0 +1,24 @@
+<%- include('header') %>
+
+<ul>
+  <% posts.forEach(function (post) { %>
+    <div class="ui relaxed divided list">
+      <div class="item">
+        <div class="content">
+          <a href="/posts/<%= post.id %>" class="header"><%= post.title %></a>
+          <sub>作者：<%= post.author %></sub>
+          <sub>浏览量：<%= post.pv %></sub>
+          <div class="description"><%= post.desc %></div>
+          <% if(user && user.isAdmin === true) {%>
+            <div class="ui buttons">
+              <a href="/posts/<%= post.id %>/edit" class="ui button">修改文章</a>
+              <a href="/posts/<%= post.id %>/remove" class="ui button">删除文章</a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+</ul>
+
+<%- include('footer') %>

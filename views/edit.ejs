@@ -1,0 +1,24 @@
+<%- include('header') %>
+
+<form class="ui form segment" method="post" action="/posts/<%= post.id %>/edit">
+  <div class="field required">
+    <label>标题</label>
+    <input type="text" name="title" value="<%= post.title %>">
+  </div>
+  <div class="field">
+    <label>简介</label>
+    <textarea name="desc" rows="3"><%- post.desc %></textarea>
+  </div>
+  <div class="field required">
+    <label>作者</label>
+    <input type="text" name="author" value="<%= post.author %>">
+  </div>
+  <div class="field required">
+    <label>内容</label>
+    <textarea name="content" rows="30"><%- post.content %></textarea>
+  </div>
+
+  <button class="ui button" type="submit">Submit</button>
+</form>
+
+<%- include('footer') %>

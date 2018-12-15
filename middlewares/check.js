@@ -1,3 +1,5 @@
+const User = require('../lib/sqlite').User
+
 module.exports = {
   /**
    * 如果没有登录，提示未登录，跳转至登录页面
@@ -25,16 +27,28 @@ module.exports = {
   /**
    * 如果不是管理员，提示没有权限，返回主页
    */
-  checkAdmin: (req, res, next) => {
+  checkAdmin: async (req, res, next) => {
     console.log('管理员权限检查')
-    next()
-  },
+    let user = req.session.user
 
-  /**
-   * 如果不是该文章作者，提示没有权限，返回当前页面
-   */
-  checkAuthor: (req, res, next) => {
-    console.log('作者权限检查')
+    // 比对数据
+    let userModel = await User.findOne({
+      where: {
+        name: user.name,
+        password: user.password
+      }
+    })
+
+    if (!userModel) {
+      req.flash('error', '你在作弊')
+      return res.redirect('/')
+    }
+
+    if (userModel.isAdmin === false) {
+      req.flash('error', '您没有权限访问此页面')
+      return res.redirect('/')
+    }
+
     next()
   },
 

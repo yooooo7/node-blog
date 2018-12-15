@@ -29,22 +29,26 @@ router.post('/', checkNotLogin, async (req, res, next) => {
 
   let user = await User.findOne({ where: { name: name } })
 
-  // 检查用户是否存在
-  if (!user) {
-    req.flash('error', '用户不存在')
-    return res.redirect('back')
-  }
-
-  // 校验密码
-  if (user.password !== sha1(password)) {
-    req.flash('error', '用户名或密码错误')
+  try {
+    // 检查用户是否存在
+    if (!user) {
+      throw new Error('用户不存在')
+    }
+    // 校验密码
+    if (user.password !== sha1(password)) {
+      throw new Error('用户名或密码错误')
+    }
+  } catch (e) {
+    req.flash('error', e.message)
     return res.redirect('back')
   }
 
   req.flash('success', '登录成功')
+
   // 用户信息写入 session
   delete user.password
   req.session.user = user
+
   // 跳转到主页
   return res.redirect('/')
 })
