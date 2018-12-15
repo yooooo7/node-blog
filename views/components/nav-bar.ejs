@@ -1,0 +1,11 @@
+<div class="ui secondary menu">
+  <a href="/posts" class="item">文章列表</a>
+  <div class="right menu">
+    <% if (user) { %>
+      <a href="/signout" class="item">登出</a>
+    <% } else { %>
+      <a href="/signin" class="item">登录</a>
+      <a href="/signup" class="item">注册</a>
+    <% } %>
+  </div>
+</div>

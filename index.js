@@ -1,4 +1,5 @@
 const path = require('path')
+const bodyParser = require('body-parser')
 const express = require('express')
 const session = require('express-session')
 const Sequelize = require('sequelize')
@@ -37,7 +38,8 @@ app.set('view engine', 'ejs')
 // 设置静态文件目录
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
-const myStore = new SequelizeStore({
+// 生成 Store 实例
+const store = new SequelizeStore({
   db: sequelize // 将 session 存储在 sqlite 中
 })
 
@@ -45,18 +47,37 @@ const myStore = new SequelizeStore({
 app.use(session({
   name: config.session.key, // 设置 cookie 中保存 session id 的字段名称
   secret: config.session.secret, // 防止 Cookie 被篡改
-  resave: false, // 强制更新 session
+  resave: false, // 不强制更新 session
   saveUninitialized: false, // 强制创建一个 session，即使用户未登录
   cookie: {
     maxAge: config.session.maxAge // 过期时间，过期后 cookie 中的 session id 自动删除
   },
-  store: myStore
+  store
 }))
 
-myStore.sync()
+// 将 session 表添加至数据库（IF NOT EXIST）
+store.sync()
 
 // flash 中间件
 app.use(flash())
+
+// 解析请求中间件
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// 设置模板常量
+app.locals.blog = {
+  title: pkg.name,
+  description: pkg.description
+}
+
+// 设置模板变量
+app.use((req, res, next) => {
+  res.locals.user = req.session.user
+  res.locals.success = req.flash('success').toString()
+  res.locals.error = req.flash('error').toString()
+  next()
+})
 
 // 路由
 routes(app)

@@ -1,0 +1,19 @@
+<% if (success) { %>
+<div class="ui success message">
+  <i class="close icon"></i>
+  <div class="header">恭喜你！</div>
+  <p>
+    <%= success %>
+  </p>
+</div>
+<% } %>
+
+<% if (error) { %>
+<div class="ui error message">
+  <i class="close icon"></i>
+  <div class="header">很抱歉！</div>
+  <p>
+    <%= error %>
+  </p>
+</div>
+<% } %>
