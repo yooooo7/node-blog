@@ -45,7 +45,7 @@ module.exports = {
     }
 
     if (userModel.isAdmin === false) {
-      req.flash('error', '您没有权限访问此页面')
+      req.flash('error', '您没有权限访问')
       return res.redirect('/')
     }
 

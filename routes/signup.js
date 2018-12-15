@@ -37,25 +37,24 @@ router.post('/', checkNotLogin, async (req, res, next) => {
   }
 
   // 用户信息写入
-  User.create(user)
-    .then(result => {
-      let user = result.dataValues
+  try {
+    let userModel = await User.create(user)
+    userModel = userModel.dataValues
 
-      // 将用户信息存入 session
-      req.session.user = user
+    // 将用户信息存入 session
+    req.session.user = userModel
 
-      // 写入 flash
-      req.flash('success', '注册成功')
+    // 写入 flash
+    req.flash('success', '注册成功')
 
-      return res.redirect('/')
-    })
-    .catch(e => {
-      if (e.errors[0].message === 'name must be unique') {
-        req.flash('error', '用户名已被占用')
-        return res.redirect('/signup')
-      }
-      next(e)
-    })
+    return res.redirect('/posts')
+  } catch (e) {
+    if (e.errors[0].message === 'name must be unique') {
+      req.flash('error', '用户名已被占用')
+      return res.redirect('/signup')
+    }
+    next(e)
+  }
 })
 
 module.exports = router

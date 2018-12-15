@@ -8,9 +8,12 @@ const Post = require('../lib/sqlite').Post
 
 // 响应文章列表页面
 router.get('/', async (req, res, next) => {
+  // 查找文章列表
   let postsList = await Post.findAll({
     attributes: ['id', 'title', 'desc', 'author', 'pv']
   })
+
+  // 渲染模板
   return res.render('posts', {
     posts: postsList
   })
@@ -25,23 +28,21 @@ router.get('/create', [checkLogin, checkAdmin], (req, res, next) => {
 router.get('/:postId', async (req, res, next) => {
   const postId = req.params.postId
 
-  try {
-    let curPost = await Post.findById(postId)
+  let curPost = await Post.findById(postId)
 
-    if (!curPost) {
-      throw new Error('该文章不存在')
-    }
-
-    let curPv = curPost.pv
-    await Post.update({ pv: curPv + 1 }, { where: { id: postId } })
-
-    res.render('post-content', {
-      post: curPost
-    })
-  } catch (e) {
-    req.flash('error', e.message)
+  // 未找到文章响应逻辑
+  if (!curPost) {
+    req.flash('error', '文章不存在')
     return res.redirect('/posts')
   }
+
+  // PV ++
+  let curPv = curPost.pv
+  await Post.update({ pv: curPv + 1 }, { where: { id: postId } })
+
+  res.render('post-content', {
+    post: curPost
+  })
 })
 
 // 响应文章发表逻辑
@@ -131,8 +132,15 @@ router.post('/:postId/edit', [checkLogin, checkAdmin], async (req, res, next) =>
 // 响应文章删除逻辑
 router.get('/:postId/remove', [checkLogin, checkAdmin], async (req, res, next) => {
   const postId = req.params.postId
+
+  let post = await Post.findOne({ where: { id: postId } })
+
+  if (!post) {
+    req.flash('error', '文章不存在')
+    return res.redirect('/posts')
+  }
+
   try {
-    let post = await Post.findOne({ where: { id: postId } })
     await post.destroy()
     req.flash('success', '删除成功')
     return res.redirect('/posts')
