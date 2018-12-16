@@ -5,6 +5,8 @@ const checkLogin = require('../middlewares/check').checkLogin
 const checkAdmin = require('../middlewares/check').checkAdmin
 
 const Post = require('../lib/sqlite').Post
+const Comment = require('../lib/sqlite').Comment
+const User = require('../lib/sqlite').User
 
 // 响应文章列表页面
 router.get('/', async (req, res, next) => {
@@ -25,24 +27,41 @@ router.get('/create', [checkLogin, checkAdmin], (req, res, next) => {
 })
 
 // 响应文章详情页面
-router.get('/:postId', async (req, res, next) => {
+router.get('/:postId', (req, res, next) => {
   const postId = req.params.postId
 
-  let curPost = await Post.findById(postId)
+  Promise.all([
+    Post.findById(postId),
+    Comment.findAll({
+      where: {
+        postId: postId
+      },
+      include: [
+        {
+          model: User,
+          required: true
+        }
+      ]
+    })
+  ]).then(async (result) => {
+    const curPost = result[0]
+    const commentList = result[1]
 
-  // 未找到文章响应逻辑
-  if (!curPost) {
-    req.flash('error', '文章不存在')
-    return res.redirect('/posts')
-  }
+    // 未找到文章
+    if (!curPost) {
+      req.flash('error', '文章不存在')
+      return res.redirect('/posts')
+    }
 
-  // PV ++
-  let curPv = curPost.pv
-  await Post.update({ pv: curPv + 1 }, { where: { id: postId } })
+    // PV ++
+    let curPv = curPost.pv
+    await Post.update({ pv: curPv + 1 }, { where: { id: postId } })
 
-  res.render('post-content', {
-    post: curPost
-  })
+    res.render('post-content', {
+      post: curPost,
+      comments: commentList
+    })
+  }).catch(next)
 })
 
 // 响应文章发表逻辑
@@ -95,26 +114,26 @@ router.post('/:postId/edit', [checkLogin, checkAdmin], async (req, res, next) =>
   const postId = req.params.postId
   let { title, desc, author, content } = req.body
 
-  // 验证文章是否存在
-  let article = await Post.findOne({ where: { id: postId } })
-
-  if (!article) {
-    req.flash('error', '文章不存在')
-    return res.redirect('/posts')
-  }
-
   // 验证必填项目
   if (!(title.length && author.length && content.length)) {
     req.flash('error', '请填写星号项')
     return res.redirect('back')
   }
 
-  // 简历博客信息
+  // 建立博客信息
   let post = {
     title,
     desc,
     author,
     content
+  }
+
+  // 验证文章是否存在
+  let article = await Post.findOne({ where: { id: postId } })
+
+  if (!article) {
+    req.flash('error', '文章不存在')
+    return res.redirect('/posts')
   }
 
   try {
