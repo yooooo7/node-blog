@@ -1,3 +1,4 @@
+const marked = require('marked')
 const express = require('express')
 const router = express.Router()
 
@@ -56,6 +57,9 @@ router.get('/:postId', (req, res, next) => {
     // PV ++
     let curPv = curPost.pv
     await Post.update({ pv: curPv + 1 }, { where: { id: postId } })
+
+    // 渲染 markdown
+    curPost.content = marked(curPost.content)
 
     res.render('post-content', {
       post: curPost,
