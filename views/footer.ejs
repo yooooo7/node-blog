@@ -1,16 +1,15 @@
+    </div>
     <script>
       $(document).ready(() => {
-        // 点击按钮弹出下拉框
-        $('.ui.dropdown').dropdown();
-
-        // 点击按钮关闭消息框
-        $('.message .close')
-          .on('click', function () {
-            $(this)
-              .closest('.message')
-              .transition('fade')
-            ;
+        <% if (locals.posts) { %>
+          $('.post-item').each(function (index, post) {
+            let curId = post.attributes['data-id'].nodeValue
+            let curUrl = `/posts/${curId}`
+            $(post).on('click', function (event) {
+              $(location).attr('href', curUrl)
+            })
           })
+        <% } %>
       })
     </script>
   </body>

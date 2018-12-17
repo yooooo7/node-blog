@@ -50,7 +50,7 @@ router.post('/', checkNotLogin, async (req, res, next) => {
   req.session.user = user
 
   // 跳转到主页
-  return res.redirect('/')
+  return res.redirect('/posts')
 })
 
 module.exports = router

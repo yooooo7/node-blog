@@ -5,11 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title><%= blog.title %></title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-  <link rel="stylesheet" href="https://cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css">
-  <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
+
+  <!-- UIkit CSS -->
+  <link rel="stylesheet" href="/static/css/uikit.min.css" />
+
+  <link rel="stylesheet" href="/static/css/main.css">
+
+  <!-- UIkit JS -->
+  <script src="/static/js/uikit.min.js"></script>
+  <script src="/static/js/uikit-icons.min.js"></script>
+
+  <!-- Jquery -->
+  <script src="/static/js/jquery-3.3.1.js"></script>
 </head>
 <body>
+  <div>
   <%- include('components/nav-bar') %>
   <%- include('components/notification') %>

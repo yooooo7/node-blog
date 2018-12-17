@@ -36,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 // 设置静态文件目录
-app.use('/static', express.static(path.join(__dirname, 'public')))
+app.use('/static', express.static(path.join(__dirname, 'static')))
 
 // 生成 Store 实例
 const store = new SequelizeStore({

@@ -1,19 +1,23 @@
 <% if (success) { %>
-<div class="ui success message">
-  <i class="close icon"></i>
-  <div class="header">恭喜你！</div>
-  <p>
-    <%= success %>
-  </p>
-</div>
+
+  <div class="uk-width-1-1@s" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <h4>恭喜你!</h4>
+    <p>
+      <%= success %>
+    </p>
+  </div>
+
 <% } %>
 
 <% if (error) { %>
-<div class="ui error message">
-  <i class="close icon"></i>
-  <div class="header">很抱歉！</div>
-  <p>
-    <%= error %>
-  </p>
-</div>
+
+  <div class="uk-width-1-1@s" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <h4>很抱歉!</h4>
+    <p>
+      <%= error %>
+    </p>
+  </div>
+
 <% } %>

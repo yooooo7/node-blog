@@ -1,16 +1,20 @@
 <%- include('header') %>
 
-<form class="ui form segment" method="post">
-  <div class="field">
-    <label>用户名</label>
-    <input type="text" name="name" placeholder="用户名">
-  </div>
-  <div class="field">
-    <label>密码</label>
-    <input type="text" name="password" placeholder="密码">
-  </div>
+<div class="uk-card uk-card-default uk-card-hover uk-card-body sign-form uk-padding-large uk-position-center">
+  <h3 class="uk-card-title">欢迎登录</h3>
+  <hr>
+  <form method="post" class="uk-form-horizontal">
+    <div class="uk-margin">
+      <label class="uk-form-label">用户名</label>
+      <input type="text" name="name" class="uk-width-1-1 uk-input">
+    </div>
+    <div class="uk-margin">
+      <label class="uk-form-label">密码</label>
+      <input type="password" name="password" class="uk-width-1-1 uk-input">
+    </div>
 
-  <button type="submit" class="ui button">Submit</button>
-</form>
+    <button type="submit" class="uk-button uk-button-secondary uk-align-right">立即登录</button>
+  </form>
+</div>
 
 <%- include('footer') %>

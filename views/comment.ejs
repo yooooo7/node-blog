@@ -1,23 +1,26 @@
-<div class="ui comments">
-  <h3 class="ui dividing header">Comments</h3>
-  <% comments.forEach(function (comment) { %>
-    <div class="comment">
-      <div class="content">
-        <div class="author"><%= comment.user.name %></div>
-        <!-- <div class="metadata">
-          <span class="date"></span>
-        </div> -->
-        <div class="text"><%= comment.content %></div>
-      </div>
-    </div>
-  <% }) %>
+<div class="uk-width-5-6 uk-padding-large">
+  <hr>
+  <ul class="uk-comment-list">
+    <% comments.forEach(function (comment) { %>
+      <li>
+        <article class="uk-comment uk-visible-toggle">
+          <div class="uk-comment-header uk-position-relative">
+            <h4 class="author"><span uk-icon="icon: user"></span> <%= comment.user.name %></h4>
+          </div>
+          <div class="uk-comment-body">
+            <div class="text"><%= comment.content %></div>
+          </div>
+        </article>
+      </li>
+    <% }) %>
+  </ul>
   <% if (user) { %>
-    <form class="ui reply form" method="post" action="/comments">
+    <form class="uk-margin-xlarge-top uk-margin-large-bottom" method="post" action="/comments">
       <input name="postId" value="<%= post.id %>" hidden>
-      <div class="field">
-        <textarea name="content"></textarea>
+      <div class="uk-margin">
+        <textarea class="uk-textarea uk-width-1-1 uk-height-small" name="content"></textarea>
       </div>
-      <button type="submit" class="ui blue labeled submit icon button"><i class="icon edit"></i> Add Reply </button>
+      <button type="submit" class="uk-button uk-button-text uk-align-right"><span uk-icon="icon: comment"></span> Add Reply </button>
     </form>
   <% } %>
 </div>

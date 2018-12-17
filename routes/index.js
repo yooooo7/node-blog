@@ -1,7 +1,7 @@
 module.exports = app => {
   // 注册主页面
   app.get('/', (req, res) => {
-    res.render('index')
+    res.redirect('/posts')
   })
 
   // 注册其余路由

@@ -1,0 +1,25 @@
+/* 通用样式 */
+html, body {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  html, body {
+    font-size: 14px;
+  }
+}
+
+.tm-navbar-container {
+  background-color: #f8f8f8;
+}
+
+.uk-alert {
+  margin-top: 0;
+}
+
+/* 注册，登录页样式 */
+.sign-form.uk-padding-large {
+  padding: 3rem 4rem;
+}
