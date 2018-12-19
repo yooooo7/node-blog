@@ -6,6 +6,13 @@
         <article class="uk-comment uk-visible-toggle">
           <div class="uk-comment-header uk-position-relative">
             <h4 class="author"><span uk-icon="icon: user"></span> <%= comment.user.name %></h4>
+
+            <% if (user && comment.user && user.id.toString() === comment.user.id.toString()) { %>
+            <div class="uk-position-top-right uk-position-small uk-hidden-hover">
+              <a href="/comments/<%= comment.id %>/remove" uk-icon="icon: trash"></a>
+            </div>
+            <% } %>
+
           </div>
           <div class="uk-comment-body">
             <div class="text"><%= comment.content %></div>

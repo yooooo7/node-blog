@@ -35,8 +35,18 @@ router.post('/', checkLogin, async (req, res, next) => {
 })
 
 // 响应删除留言逻辑
-router.get('/:commentId/remove', [checkLogin, checkOwner], (req, res, next) => {
-  res.send('删除留言')
+router.get('/:commentId/remove', [checkLogin, checkOwner], async (req, res, next) => {
+  let commentModel = req.commentModel
+
+  try {
+    await commentModel.destroy()
+    req.flash('success', '删除成功')
+    return res.redirect('back')
+  } catch (e) {
+    console.log(e)
+    req.flash('error', '删除失败')
+    return res.redirect('back')
+  }
 })
 
 module.exports = router

@@ -1,23 +1,23 @@
-<% if (success) { %>
+<div class="uk-container tm-navbar-container uk-container-expand">
+  <% if (success) { %>
 
   <div class="uk-width-1-1@s" uk-alert>
     <a class="uk-alert-close" uk-close></a>
-    <h4>恭喜你!</h4>
     <p>
       <%= success %>
     </p>
   </div>
 
-<% } %>
+  <% } %>
 
-<% if (error) { %>
+  <% if (error) { %>
 
   <div class="uk-width-1-1@s" uk-alert>
     <a class="uk-alert-close" uk-close></a>
-    <h4>很抱歉!</h4>
     <p>
       <%= error %>
     </p>
   </div>
 
-<% } %>
+  <% } %>
+</div>

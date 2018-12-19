@@ -7,6 +7,8 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const flash = require('connect-flash')
 const routes = require('./routes')
 const pkg = require('./package')
+const winston = require('winston')
+const expressWinston = require('express-winston')
 
 const config = require('config-lite')(__dirname)
 
@@ -67,8 +69,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // 设置模板常量
 app.locals.blog = {
-  title: pkg.name,
-  description: pkg.description
+  title: config.title
 }
 
 // 设置模板变量
@@ -79,8 +80,40 @@ app.use((req, res, next) => {
   next()
 })
 
+// 正常请求的日志
+app.use(expressWinston.logger({
+  transports: [
+    new (winston.transports.Console)({
+      json: true,
+      colorize: true
+    }),
+    new winston.transports.File({
+      filename: 'logs/success.log'
+    })
+  ]
+}))
+
 // 路由
 routes(app)
+
+// 错误请求的日志
+app.use(expressWinston.errorLogger({
+  transports: [
+    new winston.transports.Console({
+      json: true,
+      colorize: true
+    }),
+    new winston.transports.File({
+      filename: 'logs/error.log'
+    })
+  ]
+}))
+
+app.use(function (err, req, res, next) {
+  console.error(err)
+  req.flash('error', err.message)
+  res.redirect('/posts')
+})
 
 // 监听端口，启动程序
 app.listen(config.port, () => {

@@ -15,9 +15,13 @@ router.post('/', checkNotLogin, async (req, res, next) => {
   let { name, password } = req.body
 
   // 检测账号密码是否合规
+  let reg = new RegExp(/^[\u4E00-\u9FA5A-Za-z0-9_]+$/)
   try {
-    if (!(name.length >= 1 && name.length <= 15)) {
-      throw new Error('名称请限制在 1-15 个字符')
+    if (!(name.length >= 2 && name.length <= 15)) {
+      throw new Error('用户名请限制在 2-15 个字符')
+    }
+    if (!reg.test(name)) {
+      throw new Error('用户名只能包含中文、英文、数字和下划线')
     }
     if (!(password.length >= 6 && password.length <= 18)) {
       throw new Error('密码在 6-18 位之间')

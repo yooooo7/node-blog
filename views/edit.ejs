@@ -6,24 +6,30 @@
   <form class="uk-grid-small" method="post" uk-grid>
     <div class="uk-width-1-2">
       <label class="uk-form-label">标题</label>
-      <input type="text" name="title" class="uk-input" value="<%= post.title %>">
+      <input type="text" name="title" class="uk-input" <% if(locals.post) { %>value="<%= post.title %>"<% } %>>
     </div>
     <div class="uk-width-1-2">
       <label class="uk-form-label">作者</label>
-      <input type="text" name="author" class="uk-input" value="<%= post.author %>">
+      <input type="text" name="author" class="uk-input" <% if(locals.post) { %>value="<%= post.author %>"<% } %>>
     </div>
 
     <div class="uk-width-1-1">
       <label class="uk-form-label">简介</label>
-      <textarea name="desc" rows="3" class="uk-textarea"><%- post.desc %></textarea>
+      <textarea name="desc" rows="3" class="uk-textarea"><% if (locals.post) { %><%- post.desc %><% } %></textarea>
     </div>
 
     <div class="uk-width-1-1">
       <label class="uk-form-label">内容</label>
-      <textarea name="content" rows="20" class="uk-textarea"><%- post.content %></textarea>
+      <textarea name="content" rows="20" class="uk-textarea"><% if (locals.post) { %><%- post.content %><% } %></textarea>
     </div>
 
-    <button type="submit" class="uk-button uk-button-secondary uk-width-1-1">修改文章</button>
+    <button type="submit" class="uk-button uk-button-secondary uk-width-1-1">
+      <% if(locals.post) { %>
+        修改文章
+      <% } else { %>
+        创建文章
+      <% } %>
+    </button>
   </form>
 </div>
 

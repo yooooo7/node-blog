@@ -1,4 +1,5 @@
 const User = require('../lib/sqlite').User
+const Comment = require('../lib/sqlite').Comment
 
 module.exports = {
   /**
@@ -55,8 +56,37 @@ module.exports = {
   /**
    * 如果不是该留言作者，提示没有权限，返回当前页面
    */
-  checkOwner: (req, res, next) => {
-    console.log('留言作者检查')
+  checkOwner: async (req, res, next) => {
+    const author = req.session.user
+    const commentId = req.params.commentId
+
+    let commentModel = await Comment.findOne({
+      where: {
+        id: commentId
+      },
+      include: [
+        {
+          model: User,
+          required: true
+        }
+      ]
+    })
+
+    if (!commentModel) {
+      req.flash('error', '留言不存在')
+      return res.redirect('back')
+    }
+
+    let commentUserId = commentModel.user.id.toString()
+    let authorId = author.id.toString()
+
+    if (commentUserId !== authorId) {
+      req.flash('error', '没有权限删除留言')
+      return res.redirect('back')
+    }
+
+    req.commentModel = commentModel
+
     next()
   }
 }

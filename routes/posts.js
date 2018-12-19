@@ -13,7 +13,10 @@ const User = require('../lib/sqlite').User
 router.get('/', async (req, res, next) => {
   // 查找文章列表
   let postsList = await Post.findAll({
-    attributes: ['id', 'title', 'desc', 'author', 'pv']
+    attributes: ['id', 'title', 'desc', 'author', 'pv'],
+    order: [
+      ['createdAt', 'DESC']
+    ]
   })
 
   // 渲染模板
@@ -24,7 +27,7 @@ router.get('/', async (req, res, next) => {
 
 // 响应文章发表页面
 router.get('/create', [checkLogin, checkAdmin], (req, res, next) => {
-  res.render('create')
+  res.render('edit')
 })
 
 // 响应文章详情页面
